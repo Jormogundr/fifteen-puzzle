@@ -34,6 +34,40 @@ table, th, td {
   height: 96px
 }
 
+#game_info {
+  width: 216px;
+  margin-top: 32px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#game_time {
+  font-size: 32px;
+  display: inline-block;
+  margin: 0px;
+}
+
+#game_moves {
+  font-size: 32px;
+  display: inline-block;
+  margin: 0px;
+}
+
+#game_buttons {
+  text-align: center;
+}
+
+#game_buttons button {
+  font-size: 32px;
+  margin: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+#game_board a {
+  display: block;
+}
+
 /* Tweaks to links */
 a:link { color: blue; }
 a:visited { color: orangered; }

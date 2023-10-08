@@ -10,6 +10,10 @@
         <title>Fifteen Puzzle - Game</title>
         <link rel="shortcut icon" href="img/favicon.png">
         <link rel="stylesheet" href="styles/index.css">
+
+        <noscript> <h2>To get the most from this website, please enable JavaScript in your browser.</h2> </noscript>
+        <script src="script/game.js"></script>
+        <script src="script/timer.js"></script>
     </head>
     <body>
         <header>
@@ -33,32 +37,43 @@
             </div>
         </header>
         <main>
+            <div id="game_info">
+                <span id="game_time"></span>
+                <span id="game_moves"><p>Moves: 0</p></span>
+            </div>
+
             <table id="game_board">
                 <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
+                  <td id="cell1"><a href="#"></a></td>
+                  <td id="cell2"></td>
+                  <td id="cell3"></td>
+                  <td id="cell4"></td>
                 </tr>
                 <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
+                  <td id="cell5"></td>
+                  <td id="cell6"></td>
+                  <td id="cell7"></td>
+                  <td id="cell8"></td>
                 </tr>
                 <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
+                  <td id="cell9"></td>
+                  <td id="cell10"></td>
+                  <td id="cell11"></td>
+                  <td id="cell12"></td>
                 </tr>
                 <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>1</td>
-                  <td>15</td>
+                  <td id="cell13"></td>
+                  <td id="cell14"></td>
+                  <td id="cell15"></td>
+                  <td id="cell16"></td>
                 </tr>
               </table>
+
+              <div id="game_buttons">
+                <button type="button" id="button_reset">New Game</button>
+                <button type="button" id="button_simple">Simple Game</button>
+              </div>
+              
         </main>
         
         <aside>
