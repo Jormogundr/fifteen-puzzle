@@ -35,6 +35,10 @@ table, th, td {
   cursor: pointer;
 }
 
+#game_board tr td:hover{
+  background-color: darkgray;
+}
+
 #game_info {
   width: 216px;
   margin-top: 32px;

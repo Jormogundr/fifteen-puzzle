@@ -2,6 +2,7 @@
 var timer;
 var state = Array(16);
 const goal = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ''];
+var moveCount = 0;
 
 // initialize game state by providing a randomly shuffled array with unique elements between 1 and 15
 function initState() {
@@ -44,33 +45,36 @@ function drawBoard(arr) {
 
 function checkWinCon() {
     if (state.toString() === goal.toString()) {
-        alert("You win! Time: " + document.getElementById("game_time").innerHTML);
         clearInterval(timer);
+        let choice = confirm("You win! " + document.getElementById("game_time").innerHTML + " and Moves: " + moveCount + ". Click OK to play again.");
+        if (choice) {
+            state = initState();
+            startGameTimeCount();
+            moveCount = 0;
+            updateMoveCount();
+            drawBoard();
+        }
     }
 }
 
 // generate the state of game board to move one piece to reach goal
 function simpleState() {
-    var array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,''];
-    var insert_idx = Math.floor(Math.random() * array.length);
-    var i = 0;
-    var val = 1;
-    while (i < array.length) {
-        if (i == insert_idx) {
-            array[i] = '';
-            i++;
-        } 
-        else {
-            array[i] = val;
-            i++;
-            val++;
-        }
+    var array = Array(16);
+    var coinToss = Math.random();
+    if (coinToss > 0.5) {
+        array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, '', 15];
+    }
+    else {
+        array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, '', 13, 14, 15, 12];
     }
     // TODO: re-init if we generate win condition
-    console.log(array)
     drawBoard(array);
     return array;
 
+}
+
+function updateMoveCount() {
+    document.getElementById("game_moves").innerHTML = "Moves: " + moveCount;
 }
 
 function startGameTimeCount(interval) {
@@ -113,7 +117,7 @@ function swapTile(event) {
     }
 
     // check up
-    if (row.rowIndex > 1) {
+    if (row.rowIndex > 0) {
         if (row.parentElement.children[row.rowIndex - 1].children[clickedCell.cellIndex].innerHTML == '') {
             clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
             clickedVal = clickedCell.innerHTML;
@@ -133,19 +137,25 @@ function swapTile(event) {
             state[clickedIdx] = '';
         }
     }
-    drawBoard(state)
-    checkWinCon()
+    moveCount++;
+    updateMoveCount();
+    drawBoard(state);
+    checkWinCon();
 }
 
 function resetTime() {
     state = initState();
     startGameTimeCount();
+    moveCount = 0;
+    updateMoveCount();
     console.log("Reset ", state)
 }
 
 function simpleGame() {
     state = simpleState();
     startGameTimeCount();
+    moveCount = 0;
+    updateMoveCount();
     console.log("Simple reset", state)
 }
 
