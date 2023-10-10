@@ -31,7 +31,8 @@ table, th, td {
   text-align: center;
   vertical-align: middle;
   width: 96px;
-  height: 96px
+  height: 96px;
+  cursor: pointer;
 }
 
 #game_info {

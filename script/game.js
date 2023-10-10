@@ -1,5 +1,7 @@
 "use strict";
 var timer;
+var state = Array(16);
+const goal = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ''];
 
 // initialize game state by providing a randomly shuffled array with unique elements between 1 and 15
 function initState() {
@@ -17,12 +19,13 @@ function initState() {
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
     }
-    
+    // TODO: re-init if we randomly generate win condition
     drawBoard(array);
     return array;
 }
 
-function drawBoard(state) {
+
+function drawBoard(arr) {
     var t = document.getElementById("game_board");
     var trs = t.getElementsByTagName("tr");
     var tds = null;
@@ -33,9 +36,16 @@ function drawBoard(state) {
         tds = trs[i].getElementsByTagName("td");
         for (var n=0; n<tds.length;n++)
         {
-            tds[n].innerHTML = state[idx];
+            tds[n].innerHTML = arr[idx];
             idx++;
         }
+    }
+}
+
+function checkWinCon() {
+    if (state.toString() === goal.toString()) {
+        alert("You win! Time: " + document.getElementById("game_time").innerHTML);
+        clearInterval(timer);
     }
 }
 
@@ -56,6 +66,8 @@ function simpleState() {
             val++;
         }
     }
+    // TODO: re-init if we generate win condition
+    console.log(array)
     drawBoard(array);
     return array;
 
@@ -73,52 +85,73 @@ function startGameTimeCount(interval) {
     }, 1000);
 }
 
-function swapTile(event, state) {
+function swapTile(event) {
     const clickedCell = event.target.closest('td');
     if (!clickedCell) {return;} // Quit, did not click on cell
     const row = clickedCell.parentElement;
-    console.log(clickedCell.innerHTML, row.rowIndex, clickedCell.cellIndex, state_idx);
-
-    console.log("Clicked", clickedCell);
-    console.log("Right", clickedCell.nextElementSibling);
+    var clickedIdx;
+    var clickedVal;
     // check right
-    if (clickedCell.nextElementSibling.innerHTML == '') {
-
+    if (clickedCell.nextElementSibling) {
+        if (clickedCell.nextElementSibling.innerHTML == '') {
+            clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
+            clickedVal = clickedCell.innerHTML;
+            state[clickedIdx + 1] = parseInt(clickedVal);
+            state[clickedIdx] = '';
+        }
     }
 
-    console.log("Left", clickedCell.previousElementSibling);
     // check left
-    if (clickedCell.previousElementSibling.innerHTML == '') {
-        
+    if (clickedCell.previousElementSibling) {
+        if (clickedCell.previousElementSibling.innerHTML == '') {
+            clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
+            clickedVal = clickedCell.innerHTML;
+            console.log("Clicked val ", state[clickedIdx], " at idx ", (row.rowIndex*4) + clickedVal);
+            state[clickedIdx - 1] = parseInt(clickedVal);
+            state[clickedIdx] = '';
+        }
     }
 
     // check up
-    console.log("Up", row.parentElement.children[row.rowIndex - 1].children[clickedCell.cellIndex]);
-    if (row.parentElement.children[row.rowIndex - 1].children[clickedCell.cellIndex] == '') {
-        
+    if (row.rowIndex > 1) {
+        if (row.parentElement.children[row.rowIndex - 1].children[clickedCell.cellIndex].innerHTML == '') {
+            clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
+            clickedVal = clickedCell.innerHTML;
+            console.log("Clicked val ", clickedVal, " at idx ", clickedIdx);
+            state[clickedIdx - 4] = parseInt(clickedVal);
+            state[clickedIdx] = '';
+        }
     }
 
     // check down
-    console.log("Down", row.parentElement.children[row.rowIndex + 1].children[clickedCell.cellIndex]);
-    if (row.parentElement.children[row.rowIndex + 1].children[clickedCell.cellIndex] == '') {
-        
+    if (row.rowIndex < 3) {
+        if (row.parentElement.children[row.rowIndex + 1].children[clickedCell.cellIndex].innerHTML == '') {
+            clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
+            clickedVal = clickedCell.innerHTML;
+            console.log("Clicked val ", clickedVal, " at idx ", clickedIdx);
+            state[clickedIdx + 4] = parseInt(clickedVal);
+            state[clickedIdx] = '';
+        }
     }
+    drawBoard(state)
+    checkWinCon()
 }
 
 function resetTime() {
-    initState();
+    state = initState();
     startGameTimeCount();
+    console.log("Reset ", state)
 }
 
 function simpleGame() {
-    simpleState();
+    state = simpleState();
     startGameTimeCount();
+    console.log("Simple reset", state)
 }
 
 // on successful document load, run the game
 document.addEventListener("DOMContentLoaded", () => {
     // initialize game
-    let goal = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ''];
     var state = initState();
     console.log(state)
     startGameTimeCount();
@@ -133,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // handle click events for each tile on board
     const tbody = document.querySelector('#game_board');
-    tbody.addEventListener('click', function (e) {swapTile(e, state)});
+    tbody.addEventListener('click', function (e) {swapTile(e)});
 });
 
     
