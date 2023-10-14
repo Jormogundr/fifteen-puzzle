@@ -21,7 +21,8 @@ function initState() {
         array[randomIndex], array[currentIndex]];
     }
     // TODO: re-init if we randomly generate win condition
-    drawBoard(array);
+    state = array;
+    drawBoard(state);
     return array;
 }
 
@@ -95,6 +96,7 @@ function swapTile(event) {
     const row = clickedCell.parentElement;
     var clickedIdx;
     var clickedVal;
+
     // check right
     if (clickedCell.nextElementSibling) {
         if (clickedCell.nextElementSibling.innerHTML == '') {
@@ -102,6 +104,7 @@ function swapTile(event) {
             clickedVal = clickedCell.innerHTML;
             state[clickedIdx + 1] = parseInt(clickedVal);
             state[clickedIdx] = '';
+            moveCount++;
         }
     }
 
@@ -110,9 +113,9 @@ function swapTile(event) {
         if (clickedCell.previousElementSibling.innerHTML == '') {
             clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
             clickedVal = clickedCell.innerHTML;
-            console.log("Clicked val ", state[clickedIdx], " at idx ", (row.rowIndex*4) + clickedVal);
             state[clickedIdx - 1] = parseInt(clickedVal);
             state[clickedIdx] = '';
+            moveCount++;
         }
     }
 
@@ -121,9 +124,9 @@ function swapTile(event) {
         if (row.parentElement.children[row.rowIndex - 1].children[clickedCell.cellIndex].innerHTML == '') {
             clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
             clickedVal = clickedCell.innerHTML;
-            console.log("Clicked val ", clickedVal, " at idx ", clickedIdx);
             state[clickedIdx - 4] = parseInt(clickedVal);
             state[clickedIdx] = '';
+            moveCount++;
         }
     }
 
@@ -132,12 +135,11 @@ function swapTile(event) {
         if (row.parentElement.children[row.rowIndex + 1].children[clickedCell.cellIndex].innerHTML == '') {
             clickedIdx = (row.rowIndex * 4) + clickedCell.cellIndex;
             clickedVal = clickedCell.innerHTML;
-            console.log("Clicked val ", clickedVal, " at idx ", clickedIdx);
             state[clickedIdx + 4] = parseInt(clickedVal);
             state[clickedIdx] = '';
+            moveCount++;
         }
     }
-    moveCount++;
     updateMoveCount();
     drawBoard(state);
     checkWinCon();
@@ -148,7 +150,6 @@ function resetTime() {
     startGameTimeCount();
     moveCount = 0;
     updateMoveCount();
-    console.log("Reset ", state)
 }
 
 function simpleGame() {
@@ -156,7 +157,6 @@ function simpleGame() {
     startGameTimeCount();
     moveCount = 0;
     updateMoveCount();
-    console.log("Simple reset", state)
 }
 
 // on successful document load, run the game
